@@ -1,0 +1,110 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>From plugin to pipeline · Willian Magalhães</title><meta name="description" content="From plugin to pipeline: Three levels of content design automation. Berlin Content Design Meetup · October 2026."><meta property="og:title" content="From plugin to pipeline · Willian Magalhães"><meta property="og:description" content="From plugin to pipeline: Three levels of content design automation. Berlin Content Design Meetup · October 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap"><style>/* One reading column on the decks' own navy. Single dark look on purpose, like the slides. */
+:root { --night: #050935; --deep: #0C1454; --line: rgba(250,250,250,.14); --fg: #FAFAFA; --muted: rgba(250,250,250,.68); --sky: #93D3FD; --orange: #FEAB5F;
+  --sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body { margin: 0; background: var(--night); color: var(--fg); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: var(--sky); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 64px; display: grid; gap: 48px; }
+.crumb { margin: 0; font-size: 14px; }
+.eyebrow { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--sky); font-weight: 600; }
+h1 { font-weight: 500; font-size: clamp(32px, 6vw, 60px); line-height: 1.05; letter-spacing: -.02em; margin: 12px 0 0; text-wrap: balance; }
+h1 em, .ctitle em { font-style: normal; color: var(--sky); }
+h2 { font-weight: 500; font-size: clamp(24px, 3.4vw, 32px); margin: 0; }
+.byline { margin: 14px 0 0; color: var(--muted); font-size: 17px; max-width: 62ch; }
+.note { margin: 14px 0 0; color: var(--muted); font-size: 14px; max-width: 62ch; }
+.actions { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.btn { appearance: none; border: 0; cursor: pointer; font: 600 16px/1 var(--sans); padding: 14px 22px; border-radius: 999px; background: var(--orange); color: var(--night); }
+.ghost { font-weight: 500; }
+.deck { display: grid; gap: 22px; }
+.slide { margin: 0; display: grid; gap: 6px; }
+.slide img, .slide video { width: 100%; max-width: 100%; height: auto; aspect-ratio: 16 / 9; display: block; border-radius: 10px; border: 1px solid var(--line); background: var(--deep); }
+figcaption { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sources { display: grid; gap: 22px; }
+.group h3 { margin: 0 0 4px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--sky); font-weight: 600; }
+.src { padding-block: 12px; border-top: 1px solid var(--line); display: grid; gap: 2px; min-width: 0; }
+.src a { color: var(--fg); font-weight: 500; font-size: 17px; overflow-wrap: anywhere; }
+.src .meta, .card .meta { color: var(--muted); font-size: 14px; }
+.foot { border-top: 1px solid var(--line); padding-top: 22px; display: flex; flex-wrap: wrap; gap: 10px 26px; color: var(--muted); font-size: 14px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 28px; }
+.card { display: grid; gap: 8px; color: var(--fg); text-decoration: none; min-width: 0; }
+.card img { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 10px; border: 1px solid var(--line); }
+.card:hover img { border-color: var(--sky); }
+.ctitle { font-size: 22px; font-weight: 500; line-height: 1.2; }
+/* Present mode */
+.stage { position: fixed; inset: 0; z-index: 20; background: #000; display: grid; grid-template-rows: 1fr auto; padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+.stage[hidden] { display: none; }
+.frame { display: grid; place-items: center; min-height: 0; overflow: hidden; }
+.frame img, .frame video { max-width: 100%; max-height: 100%; width: auto; height: auto; aspect-ratio: 16 / 9; display: block; }
+.bar { display: flex; justify-content: center; align-items: center; gap: 18px; padding: 10px; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 14px; }
+.bar button { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--fg); font: 500 18px/1 var(--sans); width: 44px; height: 44px; border-radius: 999px; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) { .card img { transition: border-color .15s ease; } }
+</style></head><body>
+<main class="wrap">
+  <p class="crumb"><a href="../">All talks</a></p>
+  <header class="intro">
+    <p class="eyebrow">Berlin Content Design Meetup · October 2026</p>
+    <h1>From plugin to pipeline <em>Three levels of content design automation</em></h1>
+    <p class="byline">Willian Magalhães</p>
+    <div class="actions"><button class="btn" id="present" type="button">Present ▶</button><a class="ghost" href="plugin-to-pipeline.pdf" download>Download the PDF</a></div>
+    <p class="note">31 slides, 8 films with sound. Click-by-click builds are shown as one finished slide.</p>
+  </header>
+  <section class="deck"><figure class="slide" id="s1"><img src="slides/s01.jpg" alt="Slide 1" width="1600" height="900" loading="eager" decoding="async"><figcaption>1 / 31</figcaption></figure><figure class="slide" id="s2"><img src="slides/s02.jpg" alt="Slide 2" width="1600" height="900" loading="eager" decoding="async"><figcaption>2 / 31</figcaption></figure><figure class="slide" id="s3"><img src="slides/s03.jpg" alt="Slide 3" width="1600" height="900" loading="lazy" decoding="async"><figcaption>3 / 31</figcaption></figure><figure class="slide" id="s4"><img src="slides/s04.jpg" alt="Slide 4" width="1600" height="900" loading="lazy" decoding="async"><figcaption>4 / 31</figcaption></figure><figure class="slide" id="s5"><video controls playsinline preload="none" poster="slides/p05.jpg" width="1600" height="900"><source src="video/wiki-path.mp4" type="video/mp4"></video><figcaption>5 / 31 · film</figcaption></figure><figure class="slide" id="s6"><img src="slides/s06.jpg" alt="Slide 6" width="1600" height="900" loading="lazy" decoding="async"><figcaption>6 / 31</figcaption></figure><figure class="slide" id="s7"><img src="slides/s07.jpg" alt="Slide 7" width="1600" height="900" loading="lazy" decoding="async"><figcaption>7 / 31</figcaption></figure><figure class="slide" id="s8"><img src="slides/s08.jpg" alt="Slide 8" width="1600" height="900" loading="lazy" decoding="async"><figcaption>8 / 31</figcaption></figure><figure class="slide" id="s9"><video controls playsinline preload="none" poster="slides/p09.jpg" width="1600" height="900"><source src="video/proofie-demo.mp4" type="video/mp4"></video><figcaption>9 / 31 · film</figcaption></figure><figure class="slide" id="s10"><img src="slides/s10.jpg" alt="Slide 10" width="1600" height="900" loading="lazy" decoding="async"><figcaption>10 / 31</figcaption></figure><figure class="slide" id="s11"><img src="slides/s11.jpg" alt="Slide 11" width="1600" height="900" loading="lazy" decoding="async"><figcaption>11 / 31</figcaption></figure><figure class="slide" id="s12"><video controls playsinline preload="none" poster="slides/p12.jpg" width="1600" height="900"><source src="video/plugin-how-to.mp4" type="video/mp4"></video><figcaption>12 / 31 · film</figcaption></figure><figure class="slide" id="s13"><img src="slides/s13.jpg" alt="Slide 13" width="1600" height="900" loading="lazy" decoding="async"><figcaption>13 / 31</figcaption></figure><figure class="slide" id="s14"><img src="slides/s14.jpg" alt="Slide 14" width="1600" height="900" loading="lazy" decoding="async"><figcaption>14 / 31</figcaption></figure><figure class="slide" id="s15"><img src="slides/s15.jpg" alt="Slide 15" width="1600" height="900" loading="lazy" decoding="async"><figcaption>15 / 31</figcaption></figure><figure class="slide" id="s16"><img src="slides/s16.jpg" alt="Slide 16" width="1600" height="900" loading="lazy" decoding="async"><figcaption>16 / 31</figcaption></figure><figure class="slide" id="s17"><img src="slides/s17.jpg" alt="Slide 17" width="1600" height="900" loading="lazy" decoding="async"><figcaption>17 / 31</figcaption></figure><figure class="slide" id="s18"><img src="slides/s18.jpg" alt="Slide 18" width="1600" height="900" loading="lazy" decoding="async"><figcaption>18 / 31</figcaption></figure><figure class="slide" id="s19"><video controls playsinline preload="none" poster="slides/p19.jpg" width="1600" height="900"><source src="video/skill-how-to.mp4" type="video/mp4"></video><figcaption>19 / 31 · film</figcaption></figure><figure class="slide" id="s20"><img src="slides/s20.jpg" alt="Slide 20" width="1600" height="900" loading="lazy" decoding="async"><figcaption>20 / 31</figcaption></figure><figure class="slide" id="s21"><img src="slides/s21.jpg" alt="Slide 21" width="1600" height="900" loading="lazy" decoding="async"><figcaption>21 / 31</figcaption></figure><figure class="slide" id="s22"><video controls playsinline preload="none" poster="slides/p22.jpg" width="1600" height="900"><source src="video/context-bleeding.mp4" type="video/mp4"></video><figcaption>22 / 31 · film</figcaption></figure><figure class="slide" id="s23"><img src="slides/s23.jpg" alt="Slide 23" width="1600" height="900" loading="lazy" decoding="async"><figcaption>23 / 31</figcaption></figure><figure class="slide" id="s24"><img src="slides/s24.jpg" alt="Slide 24" width="1600" height="900" loading="lazy" decoding="async"><figcaption>24 / 31</figcaption></figure><figure class="slide" id="s25"><img src="slides/s25.jpg" alt="Slide 25" width="1600" height="900" loading="lazy" decoding="async"><figcaption>25 / 31</figcaption></figure><figure class="slide" id="s26"><img src="slides/s26.jpg" alt="Slide 26" width="1600" height="900" loading="lazy" decoding="async"><figcaption>26 / 31</figcaption></figure><figure class="slide" id="s27"><img src="slides/s27.jpg" alt="Slide 27" width="1600" height="900" loading="lazy" decoding="async"><figcaption>27 / 31</figcaption></figure><figure class="slide" id="s28"><video controls playsinline preload="none" poster="slides/p28.jpg" width="1600" height="900"><source src="video/pipeline-how-to.mp4" type="video/mp4"></video><figcaption>28 / 31 · film</figcaption></figure><figure class="slide" id="s29"><img src="slides/s29.jpg" alt="Slide 29" width="1600" height="900" loading="lazy" decoding="async"><figcaption>29 / 31</figcaption></figure><figure class="slide" id="s30"><video controls playsinline preload="none" poster="slides/p30.jpg" width="1600" height="900"><source src="video/content-pipeline.mp4" type="video/mp4"></video><figcaption>30 / 31 · film</figcaption></figure><figure class="slide" id="s31"><video controls playsinline preload="none" poster="slides/p31.jpg" loop muted autoplay width="1600" height="900"><source src="video/closing-thank-you.mp4" type="video/mp4"></video><figcaption>31 / 31 · film</figcaption></figure></section>
+  
+  <footer class="foot"><span>Willian Magalhães · Content &amp; Conversation Designer</span>
+<a href="https://www.linkedin.com/in/uxwillian/">linkedin.com/in/uxwillian</a><a href="https://arara.school/en/">arara.school/en</a></footer>
+</main>
+<div class="stage" id="stage" hidden><div class="frame" id="frame"></div><div class="bar"><button type="button" id="prev" aria-label="Previous slide">←</button><span id="count"></span><button type="button" id="next" aria-label="Next slide">→</button><button type="button" id="close" aria-label="Close">✕</button></div></div>
+<script>const ITEMS = [{"type": "img", "src": "slides/s01.jpg"}, {"type": "img", "src": "slides/s02.jpg"}, {"type": "img", "src": "slides/s03.jpg"}, {"type": "img", "src": "slides/s04.jpg"}, {"type": "video", "src": "video/wiki-path.mp4", "poster": "slides/p05.jpg", "loop": false}, {"type": "img", "src": "slides/s06.jpg"}, {"type": "img", "src": "slides/s07.jpg"}, {"type": "img", "src": "slides/s08.jpg"}, {"type": "video", "src": "video/proofie-demo.mp4", "poster": "slides/p09.jpg", "loop": false}, {"type": "img", "src": "slides/s10.jpg"}, {"type": "img", "src": "slides/s11.jpg"}, {"type": "video", "src": "video/plugin-how-to.mp4", "poster": "slides/p12.jpg", "loop": false}, {"type": "img", "src": "slides/s13.jpg"}, {"type": "img", "src": "slides/s14.jpg"}, {"type": "img", "src": "slides/s15.jpg"}, {"type": "img", "src": "slides/s16.jpg"}, {"type": "img", "src": "slides/s17.jpg"}, {"type": "img", "src": "slides/s18.jpg"}, {"type": "video", "src": "video/skill-how-to.mp4", "poster": "slides/p19.jpg", "loop": false}, {"type": "img", "src": "slides/s20.jpg"}, {"type": "img", "src": "slides/s21.jpg"}, {"type": "video", "src": "video/context-bleeding.mp4", "poster": "slides/p22.jpg", "loop": false}, {"type": "img", "src": "slides/s23.jpg"}, {"type": "img", "src": "slides/s24.jpg"}, {"type": "img", "src": "slides/s25.jpg"}, {"type": "img", "src": "slides/s26.jpg"}, {"type": "img", "src": "slides/s27.jpg"}, {"type": "video", "src": "video/pipeline-how-to.mp4", "poster": "slides/p28.jpg", "loop": false}, {"type": "img", "src": "slides/s29.jpg"}, {"type": "video", "src": "video/content-pipeline.mp4", "poster": "slides/p30.jpg", "loop": false}, {"type": "video", "src": "video/closing-thank-you.mp4", "poster": "slides/p31.jpg", "loop": true}];
+// Present mode: one slide or film at a time. Arrows, space, swipe; Esc closes. Films play when they come up.
+(() => {
+  const stage = document.getElementById("stage"), frame = document.getElementById("frame"), count = document.getElementById("count");
+  let i = 0, startX = null;
+  function show(n) {
+    i = Math.max(0, Math.min(ITEMS.length - 1, n));
+    const it = ITEMS[i];
+    frame.replaceChildren();
+    if (it.type === "img") {
+      const img = new Image(); img.src = it.src; img.alt = "Slide " + (i + 1); frame.append(img);
+    } else {
+      const v = document.createElement("video");
+      v.src = it.src; v.poster = it.poster; v.controls = true; v.playsInline = true; v.loop = !!it.loop;
+      frame.append(v); v.play().catch(() => {});
+    }
+    count.textContent = (i + 1) + " / " + ITEMS.length;
+    // keep the next slide warm
+    const nx = ITEMS[i + 1]; if (nx && nx.type === "img") { const p = new Image(); p.src = nx.src; }
+  }
+  function open(n) {
+    document.querySelectorAll(".deck video").forEach(v => v.pause());
+    stage.hidden = false; show(n);
+    if (stage.requestFullscreen) stage.requestFullscreen().catch(() => {});
+  }
+  function close() {
+    stage.hidden = true; frame.replaceChildren();
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    const el = document.getElementById("s" + (i + 1)); if (el) el.scrollIntoView({ block: "center" });
+  }
+  document.getElementById("present").addEventListener("click", () => open(0));
+  document.querySelectorAll(".deck .slide img").forEach(img => img.addEventListener("click", () => open(+img.closest(".slide").id.slice(1) - 1)));
+  document.getElementById("prev").addEventListener("click", () => show(i - 1));
+  document.getElementById("next").addEventListener("click", () => show(i + 1));
+  document.getElementById("close").addEventListener("click", close);
+  document.addEventListener("keydown", e => {
+    if (stage.hidden) return;
+    if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === "Escape") close();
+  });
+  document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && !stage.hidden) close(); });
+  frame.addEventListener("touchstart", e => { startX = e.touches[0].clientX; }, { passive: true });
+  frame.addEventListener("touchend", e => {
+    if (startX === null) return; const dx = e.changedTouches[0].clientX - startX; startX = null;
+    if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+  });
+})();
+</script></body></html>

@@ -1,0 +1,42 @@
+/* One reading column on the decks' own navy. Single dark look on purpose, like the slides. */
+:root { --night: #050935; --deep: #0C1454; --line: rgba(250,250,250,.14); --fg: #FAFAFA; --muted: rgba(250,250,250,.68); --sky: #93D3FD; --orange: #FEAB5F;
+  --sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body { margin: 0; background: var(--night); color: var(--fg); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: var(--sky); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 64px; display: grid; gap: 48px; }
+.crumb { margin: 0; font-size: 14px; }
+.eyebrow { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--sky); font-weight: 600; }
+h1 { font-weight: 500; font-size: clamp(32px, 6vw, 60px); line-height: 1.05; letter-spacing: -.02em; margin: 12px 0 0; text-wrap: balance; }
+h1 em, .ctitle em { font-style: normal; color: var(--sky); }
+h2 { font-weight: 500; font-size: clamp(24px, 3.4vw, 32px); margin: 0; }
+.byline { margin: 14px 0 0; color: var(--muted); font-size: 17px; max-width: 62ch; }
+.note { margin: 14px 0 0; color: var(--muted); font-size: 14px; max-width: 62ch; }
+.actions { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.btn { appearance: none; border: 0; cursor: pointer; font: 600 16px/1 var(--sans); padding: 14px 22px; border-radius: 999px; background: var(--orange); color: var(--night); }
+.ghost { font-weight: 500; }
+.deck { display: grid; gap: 22px; }
+.slide { margin: 0; display: grid; gap: 6px; }
+.slide img, .slide video { width: 100%; max-width: 100%; height: auto; aspect-ratio: 16 / 9; display: block; border-radius: 10px; border: 1px solid var(--line); background: var(--deep); }
+figcaption { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sources { display: grid; gap: 22px; }
+.group h3 { margin: 0 0 4px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--sky); font-weight: 600; }
+.src { padding-block: 12px; border-top: 1px solid var(--line); display: grid; gap: 2px; min-width: 0; }
+.src a { color: var(--fg); font-weight: 500; font-size: 17px; overflow-wrap: anywhere; }
+.src .meta, .card .meta { color: var(--muted); font-size: 14px; }
+.foot { border-top: 1px solid var(--line); padding-top: 22px; display: flex; flex-wrap: wrap; gap: 10px 26px; color: var(--muted); font-size: 14px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 28px; }
+.card { display: grid; gap: 8px; color: var(--fg); text-decoration: none; min-width: 0; }
+.card img { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 10px; border: 1px solid var(--line); }
+.card:hover img { border-color: var(--sky); }
+.ctitle { font-size: 22px; font-weight: 500; line-height: 1.2; }
+/* Present mode */
+.stage { position: fixed; inset: 0; z-index: 20; background: #000; display: grid; grid-template-rows: 1fr auto; padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+.stage[hidden] { display: none; }
+.frame { display: grid; place-items: center; min-height: 0; overflow: hidden; }
+.frame img, .frame video { max-width: 100%; max-height: 100%; width: auto; height: auto; aspect-ratio: 16 / 9; display: block; }
+.bar { display: flex; justify-content: center; align-items: center; gap: 18px; padding: 10px; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 14px; }
+.bar button { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--fg); font: 500 18px/1 var(--sans); width: 44px; height: 44px; border-radius: 999px; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) { .card img { transition: border-color .15s ease; } }
